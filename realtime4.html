@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime Data 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+      
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            margin-bottom:10px;
+        }
+      
+        .header-content {
+            display: flex;
+            align-items: center;
+        }
+      
+        .left-section h1 {
+            margin: 0 20px;
+            font-size: 24px;
+        }
+      
+        .right-section {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+      
+        .realtime-links {
+            display: flex;
+            gap: 40px; 
+            margin-right: 40px; 
+        }
+      
+        .realtime-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: transform 0.3s;
+            
+        }
+      
+        .realtime-links a:hover {
+            text-decoration: none;
+            transform: scale(1.1);
+            color:lightgrey;
+        }
+      
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+      
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+      
+        .logout-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+      
+        .logout-menu a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+      
+        .logout-menu a:hover {
+            background-color: #f2f2f2;
+        }
+      
+        .menu-icon {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+      
+        .menu-icon .bar {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 4px 0;
+        }
+        
+        .nav-menu {
+            display: none;
+            flex-direction: column;
+            background-color: #333;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 230px;
+            z-index: 1;
+          }
+          
+          .nav-menu a {
+            padding: 10px;
+            color: #fff;
+            text-decoration: none;
+          }
+          
+          .nav-menu a:hover {
+            background-color: #575757;
+          }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="header-content">
+            <!-- Hamburger Menu Icon -->
+            <div class="menu-icon" onclick="toggleNavMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+    
+            <nav class="nav-menu" id="navMenu">
+                <a href="home.html">REALTIME DATA</a>
+                <a href="realtime2.html">APPLE FARM INSIGHTS</a>
+                <a href="realtime3.html">YIELD INSIGHTS </a>
+            </nav>
+    
+            <!-- Left Section (Title) -->
+            <div class="left-section">
+                <h1>AERIAL MANAGEMENT</h1>
+            </div>
+            
+            <!-- Right Section (Links and User Profile) -->
+            <div class="right-section">
+                
+    
+                <!-- User Profile -->
+                <div class="user-profile" onclick="toggleLogoutMenu()">
+                    <img src="asset/images/user.png" alt="User Icon">
+                    <div class="logout-menu" id="logoutMenu">
+                        <a href="#">Profile</a>
+                        <a href="index.html">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <iframe 
+            title="Power BI Page 2" 
+            width="100%" 
+            height="700" 
+            src="https://app.powerbi.com/reportEmbed?reportId=341afa99-8ee5-44e1-b8b5-7c18187525a1&autoAuth=true&ctid=3e19468b-e065-44a1-9cde-749457855c06" 
+            frameborder="0" 
+            allowFullScreen="true">
+        </iframe>
+    </main>
+
+    <script>
+        function toggleNavMenu() {
+            var navMenu = document.getElementById("navMenu");
+            if (navMenu.style.display === "flex") {
+                navMenu.style.display = "none";
+            } else {
+                navMenu.style.display = "flex";
+            }
+        }
+        
+        // Toggle Logout Menu
+        function toggleLogoutMenu() {
+            const logoutMenu = document.getElementById('logoutMenu');
+            logoutMenu.style.display = (logoutMenu.style.display === 'block') ? 'none' : 'block';
+        }
+        
+        // Close Logout Menu if clicked outside
+        document.addEventListener('click', function(event) {
+            const userIcon = document.querySelector('.user-profile');
+            const logoutMenu = document.getElementById('logoutMenu');
+        
+            if (!userIcon.contains(event.target) && logoutMenu.style.display === 'block') {
+                logoutMenu.style.display = 'none';
+            }
+        });
+
+    </script>
+</body>
+</html>

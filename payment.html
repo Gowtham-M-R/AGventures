@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .payment-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .payment-option {
+            margin-bottom: 20px;
+        }
+        .payment-option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .upi-section {
+            display: none;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            margin-top: 20px;
+        }
+        .upi-section img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .cod-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .cod-section input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .cart-total {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Payment Page</h1>
+    <div class="payment-container">
+        <h2>Select Payment Method</h2>
+        <div class="payment-option">
+            <label>
+                <input type="radio" name="payment" value="cod" onclick="toggleSections('cod')">
+                Cash on Delivery (COD)
+            </label>
+        </div>
+        <div class="payment-option">
+            <label>
+                <input type="radio" name="payment" value="upi" onclick="toggleSections('upi')">
+                UPI Payment
+            </label>
+        </div>
+
+        
+        <div class="upi-section" id="upiSection">
+            <h3>Scan the QR Code to Pay:</h3>
+            <img id="qrCode" src="asset/images/QR.png" alt="UPI QR Code">
+        </div>
+
+        
+        <div class="cod-section" id="codSection">
+            <h3>Enter Delivery Address:</h3>
+            <input type="text" id="address" placeholder="Enter your address">
+        </div>
+
+        <button onclick="submitPayment()">Submit Payment</button>
+    </div>
+
+    <script>
+        function toggleSections(method) {
+            const upiSection = document.getElementById('upiSection');
+            const codSection = document.getElementById('codSection');
+            
+            if (method === 'upi') {
+                upiSection.style.display = 'flex';
+                codSection.style.display = 'none';
+            } else if (method === 'cod') {
+                upiSection.style.display = 'none';
+                codSection.style.display = 'block';
+            }
+        }
+
+        function submitPayment() {
+            const paymentMethod = document.querySelector('input[name="payment"]:checked');
+            if (!paymentMethod) {
+                alert('Please select a payment method!');
+                return;
+            }
+
+            if (paymentMethod.value === 'cod') {
+                const address = document.getElementById('address').value;
+                if (!address) {
+                    alert('Please enter your address for Cash on Delivery.');
+                    return;
+                }
+                alert(`You selected Cash on Delivery.\nYour order will be delivered to:\n${address}`);
+            } else if (paymentMethod.value === 'upi') {
+                alert('You selected UPI Payment. Please scan the QR code to complete your payment!');
+            }
+        }
+    </script>
+</body>
+</html>

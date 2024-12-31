@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soil Moisture Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
+
+  header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+  }
+
+  .header-content {
+      display: flex;
+      align-items: center;
+  }
+
+  .left-section h1 {
+      margin: 0 20px;
+      font-size: 24px;
+  }
+
+  .right-section {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+  }
+
+  .realtime-links {
+      display: flex;
+      gap: 40px; 
+      margin-right: 40px; 
+  }
+
+  .realtime-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+      transition: transform 0.3s;
+      
+  }
+
+  .realtime-links a:hover {
+      text-decoration: none;
+      transform: scale(1.1);
+      color:lightgrey;
+  }
+
+  .user-profile {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+  }
+
+  .user-profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+  }
+
+  .logout-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .logout-menu a {
+      display: block;
+      padding: 10px;
+      color: #333;
+      text-decoration: none;
+  }
+
+  .logout-menu a:hover {
+      background-color: #f2f2f2;
+  }
+
+  .menu-icon {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+  }
+
+  .menu-icon .bar {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 4px 0;
+  }
+  
+  .nav-menu {
+      display: none;
+      flex-direction: column;
+      background-color: #333;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 230px;
+      z-index: 1;
+    }
+    
+    .nav-menu a {
+      padding: 10px;
+      color: #fff;
+      text-decoration: none;
+    }
+    
+    .nav-menu a:hover {
+      background-color: #575757;
+    }
+    
+    .body {
+      margin: 0;
+      padding: 0;
+      height: 700px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f4f4f9;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); 
+      grid-template-rows: repeat(2, 1fr);
+      width: 100%;
+      height: 100%;
+  
+    }
+
+    .section {
+      display: flex;
+      height: 350px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      border-right: 2px solid #ccc;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .container .section:last-child {
+      border-right: none;
+
+    }
+
+    .container .section:nth-child(3) {
+      border-right: none;
+    }
+    #doughnutChart, #npkChart {
+      width: 70% !important;
+      height: 70% !important;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .status {
+      font-size: 20px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .emoji {
+      font-size: 24px;
+    }
+
+    .progress-container {
+      width: 90%;
+      text-align: center;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      margin-top: 5px;
+    }
+
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      text-align: center;
+      color: white;
+      line-height: 20px;
+      font-size: 14px;
+      border-radius: 10px;
+    }
+
+    .progress-container p {
+      font-size: 18px;
+      color: #6e6e6e;
+    }
+
+    .pump-status {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap:20px;
+    }
+
+    .pump-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 2px solid #ccc;
+      transition: background-color 0.3s ease;
+    }
+
+    .pump-on {
+      background-color: #4caf50;
+    }
+
+    h2 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .water-level-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .water-level-bar {
+      width: 90%;
+      height: 100px;
+      background-color: greenyellow;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .water-level-bar span {
+      display: block;
+      height: 100%;
+      text-align: center;
+      color: white;
+      line-height: 20px;
+      font-size: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+        <!-- Hamburger Menu Icon -->
+        <div class="menu-icon" onclick="toggleNavMenu()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <nav class="nav-menu" id="navMenu">
+            <a href="realtime.html">Realtime data</a>
+            <a href="realtime2.html">APPLE FARM INSIGHTS</a>
+            <a href="realtime3.html">YIELD INSIGHTS </a>
+            <a href="realtime4.html">AERIAL MANAGEMENT</a>
+        </nav>
+
+        <!-- Left Section (Title) -->
+        <div class="left-section">
+            <h1>Dashboard</h1>
+        </div>
+        
+        <!-- Right Section (Links and User Profile) -->
+        <div class="right-section">
+            
+
+            <!-- User Profile -->
+            <div class="user-profile" onclick="toggleLogoutMenu()">
+                <img src="asset/images/user.png" alt="User Icon">
+                <div class="logout-menu" id="logoutMenu">
+                    <a href="#">Profile</a>
+                    <a href="index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<div class="body">
+  <div class="container">
+    <div class="section">
+      <canvas id="doughnutChart"></canvas>
+      <div class="status" id="status">
+        <span class="emoji" id="emoji"></span>
+        <span id="statusText"></span>
+      </div>
+    </div>
+    <div class="section">
+      <canvas id="lineChart"></canvas>
+    </div>
+    <div class="section">
+      <div class="progress-container">
+        <p>Temperature</p>
+        <div class="progress-bar">
+          <span style="width: 72%; background-color: #4caf50;">27.4°C</span>
+        </div>
+      </div>
+      <div class="progress-container">
+        <p>Humidity</p>
+        <div class="progress-bar">
+          <span style="width: 72%; background-color: #4caf50;">72%</span>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Pump Status</h2>
+      <div class="pump-status">
+        <div class="pump-circle" id="pump1"></div>
+        <div class="pump-circle" id="pump2"></div>
+        <div class="pump-circle" id="pump3"></div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>NPK Levels</h2>
+      <canvas id="npkChart"></canvas>
+    </div>
+    <div class="section">
+      <div class="water-level-container">
+        <h2>Water Level</h2>
+        <div class="water-level-bar" id="waterLevelBar">
+          <span id="waterLevelText">75%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyC6Ts5F96MQiQjh2Bnxezhdl2ZmIOQdwPc",
+      authDomain: "agventure-19f2c.firebaseapp.com",
+      databaseURL: "https://agventure-19f2c-default-rtdb.firebaseio.com",
+      projectId: "agventure-19f2c",
+      storageBucket: "agventure-19f2c.firebasestorage.app",
+      messagingSenderId: "84297589542",
+      appId: "1:84297589542:web:ccda618c34b702fff9d7e7",
+      measurementId: "G-3EHNMFGJM5"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database(app);
+
+    // Reference to your Firebase database
+    const soilMoistureRef = database.ref('/powerbi/soilMoisture');
+    const temperatureRef = database.ref('/powerbi/temperature');
+    const humidityRef = database.ref("/powerbi/humidity");
+    const pump1Ref = database.ref('/EnvironmentData/Pump1');
+    const pump2Ref = database.ref('/EnvironmentData/Pump2');
+    const pump3Ref = database.ref('/EnvironmentData/Pump3');
+    const waterLevelRef = database.ref('/UltrasonicSensor/Distance');
+    const npkLevelsRef = database.ref('npkLevels');
+
+    // Initialize Doughnut Chart
+    const doughnutChart = new Chart(document.getElementById("doughnutChart"), {
+      type: 'doughnut',
+      data: {
+        labels: ['Soil Moisture', 'Dry Area'],
+        datasets: [{
+          data: [0, 100],  // Initial values (you will update these later)
+          backgroundColor: ['#4caf50', '#e0e0e0'],  // Colors for the sections
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+
+    // Function to update soil moisture
+    function updateSoilMoisture(value) {
+      // Ensure value is within the range [0, 100]
+      value = Math.max(0, Math.min(100, value));
+
+      // Update doughnut chart data
+      const doughnutChartData = doughnutChart.data.datasets[0].data;
+      doughnutChartData[0] = value; // Update soil moisture
+      doughnutChartData[1] = 100 - value; // Update dry area
+      doughnutChart.update(); // Refresh chart with new data
+    }
+    
+    const lineChart = new Chart(document.getElementById("lineChart"), {
+      type: 'line',
+      data: {
+        labels: [], // Initial empty labels, will be updated dynamically
+        datasets: [{
+          label: 'Soil Moisture Over Time',
+          data: [], // Initial empty data
+          borderColor: '#4caf50',
+          backgroundColor: 'rgba(76, 175, 80, 0.2)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4 // Smooth curve
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Time'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Soil Moisture (%)'
+            },
+            min: 0,
+            max: 100
+          }
+        }
+      }
+    });
+  
+    // Function to update Line Chart dynamically
+    function updateLineChart(value) {
+      const currentTime = new Date().toLocaleTimeString(); // Get current time
+      const lineChartData = lineChart.data;
+  
+      // Add new data point
+      lineChartData.labels.push(currentTime);
+      lineChartData.datasets[0].data.push(value);
+  
+      // Limit data points to the last 10 readings
+      if (lineChartData.labels.length > 10) {
+        lineChartData.labels.shift(); // Remove oldest label
+        lineChartData.datasets[0].data.shift(); // Remove oldest data
+      }
+  
+      lineChart.update(); // Refresh the chart
+    }
+  
+    // Listen for changes in Firebase Realtime Database for Soil Moisture
+    soilMoistureRef.on('value', (snapshot) => {
+      const soilMoisture = snapshot.val();
+      if (soilMoisture !== null) {
+        updateLineChart(soilMoisture); // Update line chart with new value
+      }
+    });
+
+    // Function to update temperature
+    function updateTemperature(temp) {
+      const progressBar = document.querySelector(".progress-container:nth-child(1) .progress-bar span");
+      progressBar.style.width = temp + '%';
+      progressBar.innerText = temp + "°C";
+    }
+
+    // Function to update humidity
+    function updateHumidity(humidity) {
+      const progressBar = document.querySelector(".progress-container:nth-child(2) .progress-bar span");
+      progressBar.style.width = humidity + '%';
+      progressBar.innerText = humidity + "%";
+    }
+
+    // Function to update pump status
+    function updatePumpStatus(pumpKey, status) {
+      const pump = document.getElementById(pumpKey); // Select pump by its ID
+      if (status === 'on') {
+        pump.classList.add('pump-on'); // Add active class for 'on' status
+      } else {
+        pump.classList.remove('pump-on'); // Remove active class for 'off' status
+      }
+    }
+    
+    // Listener for pump1
+    pump1Ref.on('value', (snapshot) => {
+      const status = snapshot.val(); // Get the value of pump1
+      if (status !== null) {
+        updatePumpStatus('pump1', status); // Update the UI for pump1
+      }
+    });
+    
+    // Listener for pump2
+    pump2Ref.on('value', (snapshot) => {
+      const status = snapshot.val(); // Get the value of pump2
+      if (status !== null) {
+        updatePumpStatus('pump2', status); // Update the UI for pump2
+      }
+    });
+    
+    // Listener for pump3
+    pump3Ref.on('value', (snapshot) => {
+      const status = snapshot.val(); // Get the value of pump3
+      if (status !== null) {
+        updatePumpStatus('pump3', status); // Update the UI for pump3
+      }
+    });
+    // Function to update water level
+    function updateWaterLevel(level) {
+      const waterLevelBar = document.getElementById('waterLevelBar');
+      const waterLevelText = document.getElementById('waterLevelText');
+      waterLevelBar.style.width = level + '%';
+      waterLevelText.innerText = level + '%';
+    }
+
+    const npkPieCtx = document.getElementById("npkChart").getContext("2d");
+    const npkPieChart = new Chart(npkPieCtx, {
+        type: 'pie',
+        data: {
+            labels: ["Nitrogen", "Phosphorus", "Potassium"],
+            datasets: [{
+                data: [50, 30, 20],
+                backgroundColor: ['#FF5733', '#4CAF50', '#C70039'],
+                hoverOffset: 4,
+            }],
+        },
+    });
+
+    // Listen for changes in Firebase Realtime Database
+    soilMoistureRef.on('value', (snapshot) => {
+      const soilMoisture = snapshot.val();
+      if (soilMoisture !== null) {
+        updateSoilMoisture(soilMoisture);  // Update the chart with the latest value
+      }
+    });
+  
+    temperatureRef.on('value', (snapshot) => {
+      const temperature = snapshot.val();
+      if (temperature !== null) {
+        updateTemperature(temperature);  // Update temperature progress bar
+      }
+    });
+
+    humidityRef.on('value', (snapshot) => {
+      const humidity = snapshot.val();
+      if (humidity !== null) {
+        updateHumidity(humidity);  // Update humidity progress bar
+      }
+    });
+
+    pumpStatusRef.on('value', (snapshot) => {
+      const pumpStatuses = snapshot.val();
+      if (pumpStatuses !== null) {
+        updatePumpStatus(pumpStatuses);  // Update pump status
+      }
+    });
+
+    waterLevelRef.on('value', (snapshot) => {
+      const waterLevel = snapshot.val();
+      if (waterLevel !== null) {
+        updateWaterLevel(waterLevel);  // Update water level
+      }
+    });
+
+    npkLevelsRef.on('value', (snapshot) => {
+      const npkLevels = snapshot.val();
+      if (npkLevels !== null) {
+        updateNPKLevels(npkLevels);  // Update NPK levels chart
+      }
+    });
+
+    function toggleNavMenu() {
+      var navMenu = document.getElementById("navMenu");
+      if (navMenu.style.display === "flex") {
+          navMenu.style.display = "none";
+      } else {
+          navMenu.style.display = "flex";
+      }
+  }
+  // Toggle Logout Menu
+  function toggleLogoutMenu() {
+      const logoutMenu = document.getElementById('logoutMenu');
+      logoutMenu.style.display = (logoutMenu.style.display === 'block') ? 'none' : 'block';
+  }
+  
+  // Close Logout Menu if clicked outside
+  document.addEventListener('click', function(event) {
+      const userIcon = document.querySelector('.user-profile');
+      const logoutMenu = document.getElementById('logoutMenu');
+  
+      if (!userIcon.contains(event.target) && logoutMenu.style.display === 'block') {
+          logoutMenu.style.display = 'none';
+      }
+  });
+  </script>
+</body>
+</html>

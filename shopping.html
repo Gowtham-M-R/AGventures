@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Fertilizer, Apple Varieties, and Pesticides</title>
+    <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 10px;
+                background-color: #f9f9f9;
+            }
+            h1, h2 {
+                text-align: center;
+            }
+            .search-bar {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 10px 0;
+            }
+            .search-bar input {
+                width: 300px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px 0 0 5px;
+                outline: none;
+            }
+            .search-bar button {
+                padding: 10px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 0 5px 5px 0;
+                cursor: pointer;
+            }
+            .search-bar button:hover {
+                background-color: #0056b3;
+            }
+            .view-cart-btn {
+                margin-left: 10px;
+                padding: 10px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .view-cart-btn:hover {
+                background-color: #218838;
+            }
+            .slideshow-container {
+                position: relative;
+                max-width: 100%;
+                margin: auto;
+                overflow: hidden;
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
+            .slideshow img {
+                width: 100%;
+                height: 500px;
+                object-fit: cover;
+            }
+            .product-container {
+                display: flex;
+                overflow-x: auto;
+                gap: 20px;
+                padding: 10px;
+                max-width: 100%;
+                background-color: #f9f9f9;
+            }
+            .product-container::-webkit-scrollbar {
+                height: 8px;
+            }
+            .product-container::-webkit-scrollbar-thumb {
+                background-color: #ccc;
+                border-radius: 4px;
+            }
+            .product {
+                min-width: 300px;
+                border: 1px solid #ddd;
+                padding: 15px;
+                background-color: #fff;
+                text-align: center;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .product img {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 5px;
+            }
+            input[type="number"] {
+                width: 50px;
+                margin: 10px 0;
+            }
+            button {
+                padding: 8px 15px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-left:10px;   
+            }
+            button:hover {
+                background-color: #218838;
+            }
+            .cart {
+                margin-top: 30px;
+                border: 1px solid #ddd;
+                padding: 15px;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            #cartItems p {
+                margin: 8px 0;
+            }
+            .next-btn {
+                margin-top: 20px;
+                padding: 10px 15px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .next-btn:hover {
+                background-color: #0056b3;
+            }
+
+                
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Apple Fertilizers, Apple Varieties, and Pesticides</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for products...">
+            <button onclick="searchProduct()">Search</button>
+            <button class="view-cart-btn" onclick="toggleCart()">View Cart</button>
+        </div>
+    </header>
+
+    <div class="slideshow-container">
+        <div class="slideshow">
+            <img src="asset/images/off1.webp" alt="Offer">
+        </div>
+    </div>
+
+    <h2>Apple Fertilizers</h2>
+        <div class="product-container">
+        <div class="product">
+            <img src="asset/images/Fert.jpg" alt="Organic Apple Fertilizer">
+            <h3>Organic Apple Fertilizer</h3>
+            <p>Price: ₹750.00</p>
+            <label for="quantity1">Quantity:</label>
+            <input type="number" id="quantity1" value="0" min="0" max="10">
+            <button onclick="addToCart('Organic Apple Fertilizer', 750, parseInt(document.getElementById('quantity1').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/nit.jpg" alt="Nitrogen Boost Fertilizer">
+            <h3>Nitrogen Boost Fertilizer</h3>
+            <p>Price: ₹600.00</p>
+            <label for="quantity2">Quantity:</label>
+            <input type="number" id="quantity2" value="0" min="0" max="10">
+            <button onclick="addToCart('Nitrogen Boost Fertilizer', 600, parseInt(document.getElementById('quantity2').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/pot.jpg" alt="Potassium Rich Fertilizer">
+            <h3>Potassium Rich Fertilizer</h3>
+            <p>Price: ₹850.00</p>
+            <label for="quantity3">Quantity:</label>
+            <input type="number" id="quantity3" value="0" min="0" max="10">
+            <button onclick="addToCart('Potassium Rich Fertilizer', 850, parseInt(document.getElementById('quantity3').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/cal.webp" alt="Calcium Fertilizer">
+            <h3>Calcium Fertilizer</h3>
+            <p>Price: ₹700.00</p>
+            <label for="quantity4">Quantity:</label>
+            <input type="number" id="quantity4" value="0" min="0" max="10">
+            <button onclick="addToCart('Calcium Fertilizer', 700, parseInt(document.getElementById('quantity4').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/phos.jpeg" alt="Phosphorus Fertilizer">
+            <h3>Phosphorus Fertilizer</h3>
+            <p>Price: ₹650.00</p>
+            <label for="quantity5">Quantity:</label>
+            <input type="number" id="quantity5" value="0" min="0" max="10">
+            <button onclick="addToCart('Phosphorus Fertilizer', 650, parseInt(document.getElementById('quantity5').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/npk.webp" alt="Balanced NPK Fertilizer">
+            <h3>Balanced NPK Fertilizer</h3>
+            <p>Price: ₹900.00</p>
+            <label for="quantity6">Quantity:</label>
+            <input type="number" id="quantity6" value="0" min="0" max="10">
+            <button onclick="addToCart('Balanced NPK Fertilizer', 900, parseInt(document.getElementById('quantity6').value))">Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- Apple Varieties Section -->
+    <h2>Apple Varieties</h2>
+    <div class="product-container">
+        <div class="product">
+            <img src="asset/images/fuji.jpg" alt="Fuji Apple">
+            <h3>Fuji Apple</h3>
+            <p>Price: ₹125.00</p>
+            <label for="appleQuantity1">Quantity:</label>
+            <input type="number" id="appleQuantity1" value="0" min="0" max="10">
+            <button onclick="addToCart('Fuji Apple', 125, parseInt(document.getElementById('appleQuantity1').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/gala.jpg" alt="Gala Apple">
+            <h2>Gala Apple</h2>
+            <p>Price: ₹130.00</p>
+            <label for="appleQuantity2">Quantity:</label>
+            <input type="number" id="appleQuantity2" value="0" min="0" max="10">
+            <button onclick="addToCart('Gala Apple', 130, parseInt(document.getElementById('appleQuantity2').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/honey.jpg" alt="Honeycrisp Apple">
+            <h2>Honeycrisp Apple</h2>
+            <p>Price: ₹150.00</p>
+            <label for="appleQuantity3">Quantity:</label>
+            <input type="number" id="appleQuantity3" value="0" min="0" max="10">
+            <button onclick="addToCart('Honeycrisp Apple', 150, parseInt(document.getElementById('appleQuantity3').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/granny.webp" alt="Granny Smith Apple">
+            <h2>Granny Smith Apple</h2>
+            <p>Price: ₹120.00</p>
+            <label for="appleQuantity4">Quantity:</label>
+            <input type="number" id="appleQuantity4" value="0" min="0" max="10">
+            <button onclick="addToCart('Granny Smith Apple', 120, parseInt(document.getElementById('appleQuantity4').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/gold deli.jpg" alt="Gold Delicious Apple">
+            <h2>Pink Lady Apple</h2>
+            <p>Price: ₹140.00</p>
+            <label for="appleQuantity5">Quantity:</label>
+            <input type="number" id="appleQuantity5" value="0" min="0" max="10">
+            <button onclick="addToCart('Gold Delicious Apple', 140, parseInt(document.getElementById('appleQuantity5').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/red deli.jpg" alt="Red Delicious Apple">
+            <h2>Red Delicious Apple</h2>
+            <p>Price: ₹110.00</p>
+            <label for="appleQuantity6">Quantity:</label>
+            <input type="number" id="appleQuantity6" value="0" min="0" max="10">
+            <button onclick="addToCart('Red Delicious Apple', 110, parseInt(document.getElementById('appleQuantity6').value))">Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- Pesticides Section -->
+    <h2>Pesticides</h2>
+    <div class="product-container">
+        <div class="product">
+            <img src="asset/images/org.png" alt="Organic Pesticide">
+            <h3>Organic Pesticide</h3>
+            <p>Price: ₹500.00</p>
+            <label for="pestQuantity1">Quantity:</label>
+            <input type="number" id="pestQuantity1" value="0" min="0" max="10">
+            <button onclick="addToCart('Organic Pesticide', 500, parseInt(document.getElementById('pestQuantity1').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/insect.webp" alt="Insecticide Spray">
+            <h3>Insecticide Spray</h3>
+            <p>Price: ₹450.00</p>
+            <label for="pestQuantity2">Quantity:</label>
+            <input type="number" id="pestQuantity2" value="0" min="0" max="10">
+            <button onclick="addToCart('Insecticide Spray', 450, parseInt(document.getElementById('pestQuantity2').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/fungi.webp" alt="Fungicide Solution">
+            <h3>Fungicide Solution</h3>
+            <p>Price: ₹400.00</p>
+            <label for="pestQuantity3">Quantity:</label>
+            <input type="number" id="pestQuantity3" value="0" min="0" max="10">
+            <button onclick="addToCart('Fungicide Solution', 400, parseInt(document.getElementById('pestQuantity3').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/weed.webp" alt="Weed Control Pesticide">
+            <h3>Weed Control Pesticide</h3>
+            <p>Price: ₹550.00</p>
+            <label for="pestQuantity4">Quantity:</label>
+            <input type="number" id="pestQuantity4" value="0" min="0" max="10">
+            <button onclick="addToCart('Weed Control Pesticide', 550, parseInt(document.getElementById('pestQuantity4').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/neem.jpg" alt="Neem Oil Pesticide">
+            <h3>Neem Oil Pesticide</h3>
+            <p>Price: ₹600.00</p>
+            <label for="pestQuantity5">Quantity:</label>
+            <input type="number" id="pestQuantity5" value="0" min="0" max="10">
+            <button onclick="addToCart('Neem Oil Pesticide', 600, parseInt(document.getElementById('pestQuantity5').value))">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="asset/images/sulphur.jpg" alt="Sulfur-based Pesticide">
+            <h3>Sulfur-based Pesticide</h3>
+            <p>Price: ₹520.00</p>
+            <label for="pestQuantity6">Quantity:</label>
+            <input type="number" id="pestQuantity6" value="0" min="0" max="10">
+            <button onclick="addToCart('Sulfur-based Pesticide', 520, parseInt(document.getElementById('pestQuantity6').value))">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="cart">
+        <h2>Your Cart</h2>
+        <div id="cartItems"></div>
+        <p id="totalPrice">Total: ₹0.00</p>
+        <button onclick="checkout()">Checkout</button>
+        <button id="nextButton" class="next-btn" style="display: none;" onclick="goToNextPage()">Next</button>
+    </div>
+
+    <script>
+        let cart = [];
+
+        // Add item to cart
+        function addToCart(itemName, price, quantity) {
+            if (quantity > 0) {
+                const existingItem = cart.find(item => item.name === itemName);
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({ name: itemName, price: price, quantity: quantity });
+                }
+                updateCart();
+            } else {
+                alert('Please select a valid quantity.');
+            }
+        }
+
+        // Update cart display
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const totalPriceElement = document.getElementById('totalPrice');
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                cartItems.innerHTML += `
+                    <p>${item.name} (x${item.quantity}): ₹${itemTotal.toFixed(2)}</p>
+                `;
+            });
+
+            totalPriceElement.innerText = `Total: ₹${total.toFixed(2)}`;
+        }
+
+        // Handle checkout process
+        function checkout() {
+            if (cart.length > 0) {
+                alert("Proceeding to checkout!");
+                // Replace with actual redirection URL
+                window.location.href = "payment.html";
+            } else {
+                alert("Your cart is empty!");
+            }
+        }
+
+        // Search functionality
+        function searchProduct() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const products = document.querySelectorAll('.product');
+            products.forEach(product => {
+                const productName = product.querySelector('h3, h2').innerText.toLowerCase();
+                if (productName.includes(query)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        // Toggle cart visibility (optional)
+        function toggleCart() {
+            const cartElement = document.querySelector('.cart');
+            cartElement.style.display = cartElement.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
